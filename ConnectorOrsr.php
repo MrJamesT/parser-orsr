@@ -93,7 +93,7 @@ class ConnectorOrsr
 	{
 		$this->ts_start = microtime(true);
 
-		foreach(['tidy', 'mbstring', 'iconv', 'dom', 'json'] as $extension){
+		foreach(['mbstring', 'iconv', 'dom', 'json'] as $extension){
 			if(!extension_loaded($extension)){
 				exit('Missing required PHP extension ['.$extension.'].');
 			}
@@ -474,13 +474,6 @@ class ConnectorOrsr
 		$html = iconv('windows-1250', 'utf-8', $html);
 		$html = str_replace('windows-1250', 'utf-8', $html);
 
-		// ensure valid XHTML markup
-		$tidy = new \tidy();
-		$html = $tidy->repairString($html, array(
-			'output-xhtml' => true,
-			//'show-body-only' => true, // we MUST have HEAD with charset!!!
-		), 'utf8');
-
 		// load XHTML into DOM document
 		$xml = new \DOMDocument('1.0', 'utf-8');
 		$xml->loadHTML($html);
@@ -577,13 +570,6 @@ class ConnectorOrsr
 		// convert encoding
 		$html = iconv('windows-1250', 'utf-8', $html);
 		$html = str_replace('windows-1250', 'utf-8', $html);
-
-		// ensure valid XHTML markup
-		$tidy = new \tidy();
-		$html = $tidy->repairString($html, array(
-			'output-xhtml' => true,
-			//'show-body-only' => true, // we MUST have HEAD with charset!!!
-		), 'utf8');
 
 		// purify whitespaces
 		$html = strtr($html, [
